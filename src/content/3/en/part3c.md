@@ -561,7 +561,7 @@ Next, let's change the rest of the backend functionality to use the database.
 Creating a new note is accomplished like this:
 
 ```js
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', jsonParser, (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -780,7 +780,7 @@ app.use(express.static('build'))
 app.use(express.json())
 app.use(requestLogger)
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', jsonParser, (request, response) => {
   const body = request.body
   // ...
 })
@@ -805,7 +805,7 @@ The json-parser middleware should be among the very first middleware loaded into
 ```js
 app.use(requestLogger) // request.body is undefined!
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', jsonParser, (request, response) => {
   // request.body is undefined!
   const body = request.body
   // ...
@@ -856,7 +856,7 @@ In both of the "successful" cases of deleting a resource, the backend responds w
 The toggling of the importance of a note can be easily accomplished with the [findByIdAndUpdate](https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate) method.
 
 ```js
-app.put('/api/notes/:id', (request, response, next) => {
+app.put('/api/notes/:id', jsonParser, (request, response, next) => {
   const body = request.body
 
   const note = {
